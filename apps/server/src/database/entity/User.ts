@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   Check,
-  OneToMany
+  OneToMany,
+  ManyToOne,
+  JoinColumn
 } from 'typeorm';
 import { USER_ROLE } from '../../utils/constants';
 import { IMC } from './IMC';
@@ -48,6 +50,13 @@ export class User {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
+
+  @ManyToOne(() => User, (user) => user.students, { nullable: true })
+  @JoinColumn({ name: 'professor_id' })
+  professor?: User;
+
+  @OneToMany(() => User, (user) => user.professor)
+  students?: User[];
 
   @OneToMany(() => IMC, (imc) => imc.user)
   imc: IMC[];

@@ -6,6 +6,26 @@ import { CreateImcDTO, updateImcDTO } from "../../dtos/imc-dto";
 export class IMCRepository implements IIMCRepository {
   constructor(private repository: Repository<IMC>) { }
 
+  async findAll(): Promise<IMC[]> {
+    return await this.repository.find()
+  }
+
+  async findByProfessorId(id: string): Promise<IMC[]> {
+    const imcs = await this.repository.find({
+      where: {
+        user: {
+          professor: {
+            id
+          }
+        }
+      }
+    })
+
+    if (imcs.length <= 0) return []
+
+    return imcs
+  }
+
   async update(id: string, imcDTO: updateImcDTO): Promise<IMC | null> {
     const imc = await this.repository.findOne({
       where: {
