@@ -35,7 +35,7 @@ export class UsersRepository implements IUsersRepository {
     return await this.repository.save(user)
   }
 
-  async findByUsername(username: string): Promise<UserResponseDTO | null> {
+  async findByUsername(username: string): Promise<User | null> {
     return await this.repository.findOne({
       where: { username }
     });
