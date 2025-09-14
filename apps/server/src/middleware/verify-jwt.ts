@@ -3,11 +3,6 @@ import { Unathorized } from '../errors/unauthorized';
 import jwt from 'jsonwebtoken'
 import { env } from '../env/env';
 
-interface TokenPayload {
-  id: string
-  role: 'ADMIN' | 'STUDENT' | 'PROFESSOR'
-}
-
 export function verifyJWT(request: Request, response: Response, next: NextFunction) {
   const { authorization } = request.headers;
 
@@ -19,9 +14,7 @@ export function verifyJWT(request: Request, response: Response, next: NextFuncti
 
   try {
     const tokenPayload = jwt.verify(token, env.JWT_SECRET) as TokenPayload
-
-    request.user.id = tokenPayload.id
-    request.user.role = tokenPayload.role
+    request.user = tokenPayload
 
     next()
 
