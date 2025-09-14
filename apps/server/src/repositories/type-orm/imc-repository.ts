@@ -1,10 +1,27 @@
 import { Repository } from "typeorm";
 import { IIMCRepository } from "../imc-repository";
 import { IMC } from "../../database/entity/IMC";
-import { CreateImcDTO } from "../../dtos/imc-dto";
+import { CreateImcDTO, updateImcDTO } from "../../dtos/imc-dto";
 
 export class IMCRepository implements IIMCRepository {
   constructor(private repository: Repository<IMC>) { }
+
+  async update(id: string, imcDTO: updateImcDTO): Promise<IMC | null> {
+    const imc = await this.repository.findOne({
+      where: {
+        id
+      }
+    })
+
+    if (!imc) return null
+
+    imc.height = imcDTO.height
+    imc.weight = imcDTO.weight
+    imc.classification = imcDTO.classification
+    imc.imc = imcDTO.imc
+
+    return await this.repository.save(imc)
+  }
 
   async create(imcDTO: CreateImcDTO): Promise<IMC> {
     const instance = this.repository.create({

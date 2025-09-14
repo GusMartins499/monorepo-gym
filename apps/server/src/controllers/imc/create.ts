@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { makeImcService } from "../../factories/create-imc-service";
-import { createImcRequestBodySchema, createImcSchema } from "../../dtos/imc-dto";
+import { createImcRequestBodySchema } from "../../dtos/imc-dto";
 
 export async function createImc(request: Request, response: Response) {
   const body = createImcRequestBodySchema.parse(request.body)
