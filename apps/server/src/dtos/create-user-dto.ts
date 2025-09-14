@@ -1,5 +1,6 @@
 import { z } from 'zod/v4';
-import { USER_ROLE, USER_STATUS } from '../database/entity/User';
+import { USER_STATUS } from '../database/entity/User';
+import { USER_ROLE } from '../utils/constants';
 
 const createUserSchema = z.object({
   name: z.string()
@@ -18,9 +19,21 @@ const createUserSchema = z.object({
   }).default(USER_STATUS.ACTIVE)
 });
 
+const updateUserSchema = z.object({
+  name: z.string()
+    .min(4, 'Nome deve ter pelo menos 2 caracteres')
+    .max(60, 'Nome deve ter no máximo 60 caracteres'),
+  username: z.string()
+    .min(3, 'Usuário deve ter pelo menos 3 caracteres')
+    .max(60, 'Usuário deve ter no máximo 60 caracteres')
+})
+
 type CreateUserDTO = z.infer<typeof createUserSchema>
+type UpdateUserDTO = z.infer<typeof updateUserSchema>
 
 export {
   createUserSchema,
-  CreateUserDTO
+  CreateUserDTO,
+  updateUserSchema,
+  UpdateUserDTO
 }

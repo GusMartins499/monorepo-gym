@@ -5,12 +5,7 @@ import {
   CreateDateColumn,
   Check
 } from 'typeorm';
-
-export enum USER_ROLE {
-  ADMIN = 'ADMIN',
-  STUDENT = 'STUDENT',
-  PROFESSOR = 'PROFESSOR'
-}
+import { USER_ROLE } from '../../utils/constants';
 
 export enum USER_STATUS {
   ACTIVE = 'ACTIVE',
