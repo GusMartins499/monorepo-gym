@@ -3,9 +3,11 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  Check
+  Check,
+  OneToMany
 } from 'typeorm';
 import { USER_ROLE } from '../../utils/constants';
+import { IMC } from './IMC';
 
 export enum USER_STATUS {
   ACTIVE = 'ACTIVE',
@@ -46,4 +48,7 @@ export class User {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
+
+  @OneToMany(() => IMC, (imc) => imc.user)
+  imc: IMC[];
 }
