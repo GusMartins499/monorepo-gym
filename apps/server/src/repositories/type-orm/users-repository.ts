@@ -7,9 +7,19 @@ import { UserResponseDTO } from "../../dtos/user-response-dto";
 export class UsersRepository implements IUsersRepository {
   constructor(private repository: Repository<User>) { }
 
+  async delete(id: string): Promise<void> {
+    const user = await this.repository.findOne({
+      where: { id },
+    })
+
+    if (!user) return
+
+    await this.repository.delete(user.id)
+  }
+
   async findById(id: string): Promise<UserResponseDTO | null> {
     const user = await this.repository.findOne({
-      where: { id }
+      where: { id },
     })
     if (!user) return null
 

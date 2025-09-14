@@ -7,4 +7,5 @@ export interface IUsersRepository {
   create(userDTO: CreateUserDTO): Promise<UserResponseDTO>;
   update(id: string, updateDTO: UpdateUserDTO): Promise<UserResponseDTO | null>;
   findById(userId: string): Promise<UserResponseDTO | null>
+  delete(userId: string): Promise<void>
 }
