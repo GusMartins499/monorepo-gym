@@ -5,5 +5,5 @@ dist
 #web
 .vercel
 next-env.d.ts
-/.next/
+.next/
 /out/
