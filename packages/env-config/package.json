@@ -1,0 +1,13 @@
+{
+  "name": "@monorepo-gym/env-config",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node dist/index.js",
+    "parallel": "node dist/index.js"
+  },
+  "packageManager": "pnpm@10.12.4"
+}
