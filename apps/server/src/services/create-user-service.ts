@@ -1,6 +1,7 @@
 import { CreateUserDTO } from "../dtos/create-user-dto";
 import { UserAlreadyExists } from "../errors/user-already-exists";
 import { IUsersRepository } from "../repositories/users-repository";
+import { hash } from 'bcrypt'
 
 export class CreateUserService {
   constructor(private repository: IUsersRepository) { }
@@ -12,6 +13,13 @@ export class CreateUserService {
       throw new UserAlreadyExists()
     }
 
-    return this.repository.create(userDTO);
+    const saltRounds = 12;
+    const hashedPassword = await hash(userDTO.password, saltRounds);
+
+    const user = {
+      ...userDTO,
+      password: hashedPassword
+    }
+    return this.repository.create(user);
   }
 }

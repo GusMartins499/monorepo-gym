@@ -1,5 +1,4 @@
 import { Repository } from "typeorm";
-import { hash } from 'bcrypt'
 import { User } from "../../database/entity/User";
 import { IUsersRepository } from "../users-repository";
 import { CreateUserDTO } from "../../dtos/create-user-dto";
@@ -14,13 +13,7 @@ export class UsersRepository implements IUsersRepository {
   }
 
   async create(userDTO: CreateUserDTO): Promise<User> {
-    const saltRounds = 12;
-    const hashedPassword = await hash(userDTO.password, saltRounds);
-
-    const newUserInstance = this.repository.create({
-      ...userDTO,
-      password: hashedPassword
-    });
+    const newUserInstance = this.repository.create(userDTO);
 
     return await this.repository.save(newUserInstance);
   }
