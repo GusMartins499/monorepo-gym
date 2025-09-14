@@ -6,6 +6,7 @@ import { WrongCredentials } from '../errors/wrong-credentials';
 import { JWT_EXPIRES_IN_15_MINUTES_IN_SECONDS, JWT_EXPIRES_IN_7_DAYS_IN_SECONDS } from '../utils/constants'
 import { IAuthRepository } from '../repositories/auth-repository';
 import dayjs from 'dayjs';
+import { env } from '../env/env';
 
 export class AuthenticateUserService {
   constructor(
@@ -29,12 +30,12 @@ export class AuthenticateUserService {
     const token = jwt.sign({
       id: user.id,
       role: user.role
-    }, '123456', { expiresIn: JWT_EXPIRES_IN_15_MINUTES_IN_SECONDS });
+    }, env.JWT_SECRET, { expiresIn: JWT_EXPIRES_IN_15_MINUTES_IN_SECONDS });
 
     const refreshToken = jwt.sign({
       id: user.id,
       role: user.role
-    }, '123456', { expiresIn: JWT_EXPIRES_IN_7_DAYS_IN_SECONDS });
+    }, env.JWT_SECRET, { expiresIn: JWT_EXPIRES_IN_7_DAYS_IN_SECONDS });
 
     const currentDate = dayjs()
     const currentDatePlus7days = currentDate.add(7, 'days').format()

@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import "reflect-metadata"
 import { app } from "./app";
 import errorHandler from "./middleware/error-handler";
