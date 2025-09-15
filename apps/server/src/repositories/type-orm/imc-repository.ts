@@ -7,7 +7,11 @@ export class IMCRepository implements IIMCRepository {
   constructor(private repository: Repository<IMC>) { }
 
   async findAll(): Promise<IMC[]> {
-    return await this.repository.find()
+    return await this.repository.find({
+      relations: {
+        user: true,
+      }
+    })
   }
 
   async findByProfessorId(id: string): Promise<IMC[]> {
@@ -16,8 +20,11 @@ export class IMCRepository implements IIMCRepository {
         user: {
           professor: {
             id
-          }
+          },
         }
+      },
+      relations: {
+        user: true,
       }
     })
 

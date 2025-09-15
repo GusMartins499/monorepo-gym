@@ -2,12 +2,14 @@ import { clientAPI } from "../client-axios"
 
 interface GetImcResponse {
   id: string
-  height: number
-  weight: number
-  imc: number
+  height: string
+  weight: string
+  imc: string
+  classificationLabel: string
   classification: string
-  idUserIMC: string
   createdAt: string
+  student: string
+  studentId: string
 }
 
 export async function getImcs() {

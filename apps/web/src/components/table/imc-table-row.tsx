@@ -1,14 +1,17 @@
-import { Table, Text } from "@chakra-ui/react";
+import { IconButton, Table, Text } from "@chakra-ui/react";
+import { LuPencil } from "react-icons/lu";
 
 interface IMCTableRowProps {
   payload: {
     id: string
-    height: number
-    weight: number
-    imc: number
+    height: string
+    weight: string
+    imc: string
+    classificationLabel: string
     classification: string
-    idUserIMC: string
     createdAt: string
+    student: string
+    studentId: string
   }
 }
 
@@ -16,16 +19,16 @@ export function IMCTableRow({ payload }: IMCTableRowProps) {
   return (
     <Table.Row key={payload.id} _hover={{ bg: "gray.50" }}>
       <Table.Cell textAlign="center" fontWeight="500" color='gray.600'>
-        Gustavo
+        {payload.student}
       </Table.Cell>
       <Table.Cell textAlign="center" fontWeight="500" color='gray.600'>
-        {payload.height.toFixed(2)}m
+        {payload.height}
       </Table.Cell>
       <Table.Cell textAlign="center" fontWeight="500" color='gray.600'>
-        {payload.weight}kg
+        {payload.weight}
       </Table.Cell>
       <Table.Cell textAlign="center" fontWeight="600" color="blue.600">
-        {payload.imc.toFixed(1)}
+        {payload.imc}
       </Table.Cell>
       <Table.Cell textAlign="center">
         <Text
@@ -37,11 +40,11 @@ export function IMCTableRow({ payload }: IMCTableRowProps) {
                   'gray.600'
           }
         >
-          {payload.classification}
+          {payload.classificationLabel}
         </Text>
       </Table.Cell>
       <Table.Cell textAlign="center" fontWeight="600" color="blue.600">
-        {new Date(payload.createdAt).toLocaleDateString()}
+        {payload.createdAt}
       </Table.Cell>
     </Table.Row>
   )
