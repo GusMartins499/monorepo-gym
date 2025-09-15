@@ -3,9 +3,37 @@ import { User } from "../../database/entity/User";
 import { IUsersRepository } from "../users-repository";
 import { CreateUserDTO, UpdateUserDTO } from "../../dtos/create-user-dto";
 import { UserResponseDTO } from "../../dtos/user-response-dto";
+import { USER_ROLE } from "../../utils/constants";
 
 export class UsersRepository implements IUsersRepository {
   constructor(private repository: Repository<User>) { }
+
+  async findByProfessorId(id: string): Promise<User[]> {
+    const users = await this.repository.find({
+      where: {
+        professor: {
+          id
+        },
+        role: USER_ROLE.STUDENT
+      }
+    })
+
+    if (users.length <= 0) return []
+
+    return users
+  }
+
+  async findAll(): Promise<User[]> {
+    return await this.repository.find({
+      select: {
+        id: true,
+        name: true,
+      },
+      where: {
+        role: USER_ROLE.STUDENT
+      }
+    })
+  }
 
   async delete(id: string): Promise<void> {
     const user = await this.repository.findOne({
