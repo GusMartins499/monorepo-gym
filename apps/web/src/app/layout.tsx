@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
+import { DialogImc } from "../components/dialog-imc";
 
 const InterSans = Inter({
   variable: "--font-inter-sans",
@@ -25,6 +26,7 @@ export default function RootLayout({
       >
         <Providers>
           {children}
+          <DialogImc />
         </Providers>
       </body>
     </html>

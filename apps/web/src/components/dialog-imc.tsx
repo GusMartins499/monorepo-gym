@@ -1,18 +1,15 @@
 'use client'
 
 import {
-  CloseButton,
   Dialog,
   Portal,
+  CloseButton,
 } from "@chakra-ui/react"
-import { CreateImcForm } from "./create-imc-form"
+import { useDialogStore } from "../app/store/dialog-store"
 
-interface AddImcProps {
-  open: boolean
-  onClose: () => void
-}
+export function DialogImc() {
+  const { open, title, content, closeDialog } = useDialogStore()
 
-export function DialogCreateImc({ open, onClose }: AddImcProps) {
   return (
     <Dialog.Root lazyMount open={open}>
       <Portal>
@@ -20,13 +17,11 @@ export function DialogCreateImc({ open, onClose }: AddImcProps) {
         <Dialog.Positioner>
           <Dialog.Content>
             <Dialog.Header>
-              <Dialog.Title color='gray.900'>Adicionar avaliação</Dialog.Title>
+              <Dialog.Title color="gray.900">{title}</Dialog.Title>
             </Dialog.Header>
-            <Dialog.Body>
-              <CreateImcForm onClose={onClose} />
-            </Dialog.Body>
+            <Dialog.Body>{content}</Dialog.Body>
             <Dialog.CloseTrigger asChild>
-              <CloseButton size="sm" onClick={onClose} />
+              <CloseButton size="sm" onClick={closeDialog} />
             </Dialog.CloseTrigger>
           </Dialog.Content>
         </Dialog.Positioner>

@@ -1,5 +1,7 @@
-import { IconButton, Table, Text } from "@chakra-ui/react";
+import { IconButton, Table, Text, useDisclosure } from "@chakra-ui/react";
 import { LuPencil } from "react-icons/lu";
+import { useDialogStore } from "../../app/store/dialog-store";
+import { UpdateImcForm } from "../update-imc-form";
 
 interface IMCTableRowProps {
   payload: {
@@ -16,6 +18,8 @@ interface IMCTableRowProps {
 }
 
 export function IMCTableRow({ payload }: IMCTableRowProps) {
+  const { openDialog } = useDialogStore()
+
   return (
     <Table.Row key={payload.id} _hover={{ bg: "gray.50" }}>
       <Table.Cell textAlign="center" fontWeight="500" color='gray.600'>
@@ -45,6 +49,17 @@ export function IMCTableRow({ payload }: IMCTableRowProps) {
       </Table.Cell>
       <Table.Cell textAlign="center" fontWeight="600" color="blue.600">
         {payload.createdAt}
+      </Table.Cell>
+      <Table.Cell textAlign="center" fontWeight="600">
+        <IconButton
+          size="xs"
+          bg="orange.600"
+          onClick={() =>
+            openDialog("Editar avaliação", <UpdateImcForm payload={payload} />)
+          }
+        >
+          <LuPencil />
+        </IconButton>
       </Table.Cell>
     </Table.Row>
   )

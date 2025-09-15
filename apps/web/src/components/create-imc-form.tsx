@@ -4,14 +4,10 @@ import { Fieldset, Field, Select, Input, Button, createListCollection } from "@c
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4"
-import { createImc } from "../../lib/api/create-imc";
-import { queryClient } from "../../lib/tankstack-client";
 import { useMemo } from "react";
-import { getStudents } from "../../lib/api/get-users";
-
-interface AddImcProps {
-  onClose: () => void
-}
+import { createImc } from "../lib/api/create-imc";
+import { getStudents } from "../lib/api/get-users";
+import { queryClient } from "../lib/tankstack-client";
 
 const createImcSchema = z.object({
   userId: z.string(),
@@ -21,7 +17,7 @@ const createImcSchema = z.object({
 
 type CreateImcSchema = z.infer<typeof createImcSchema>
 
-export function CreateImcForm({ onClose }: AddImcProps) {
+export function CreateImcForm() {
   const { register, handleSubmit } = useForm<CreateImcSchema>({
     defaultValues: {
       height: 0,
@@ -39,7 +35,6 @@ export function CreateImcForm({ onClose }: AddImcProps) {
     mutationFn: createImc,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['imcs'] })
-      onClose()
     }
   })
 
