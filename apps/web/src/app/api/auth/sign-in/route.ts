@@ -6,29 +6,34 @@ interface RequestBody {
   password: string
 }
 
-export const POST = async (request: NextRequest, _nextResponse: NextResponse) => {
-  const body = await request.json() as RequestBody;
-  console.log({ body })
-  const response = await api.post('/users/authenticate',
-    {
-      username: body.username,
-      password: body.password
+export const POST = async (request: NextRequest) => {
+  try {
+    const body = await request.json() as RequestBody;
+
+    const response = await api.post('/users/authenticate',
+      {
+        username: body.username,
+        password: body.password
+      })
+
+    const { token } = response.data
+
+    const cookieStore = await cookies()
+
+    cookieStore.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 15,
+      path: '/',
+      sameSite: 'strict',
     })
 
-  const { token } = response.data
-
-  const cookieStore = await cookies()
-
-  cookieStore.set('token', token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 15,
-    path: '/',
-    sameSite: 'lax',
-  })
-
-  return NextResponse.json(
-    { message: 'Login successful' },
-    { status: 200 }
-  );
+    return NextResponse.json({ token }, { status: 200 });
+  } catch (error) {
+    console.error("Auth error:", error);
+    return NextResponse.json(
+      { error: "Authentication failed" },
+      { status: 500 }
+    );
+  }
 }
