@@ -7,12 +7,17 @@ interface IMCTableRowProps {
     weight: number
     imc: number
     classification: string
+    idUserIMC: string
+    createdAt: string
   }
 }
 
 export function IMCTableRow({ payload }: IMCTableRowProps) {
   return (
     <Table.Row key={payload.id} _hover={{ bg: "gray.50" }}>
+      <Table.Cell textAlign="center" fontWeight="500" color='gray.600'>
+        Gustavo
+      </Table.Cell>
       <Table.Cell textAlign="center" fontWeight="500" color='gray.600'>
         {payload.height.toFixed(2)}m
       </Table.Cell>
@@ -34,6 +39,9 @@ export function IMCTableRow({ payload }: IMCTableRowProps) {
         >
           {payload.classification}
         </Text>
+      </Table.Cell>
+      <Table.Cell textAlign="center" fontWeight="600" color="blue.600">
+        {new Date(payload.createdAt).toLocaleDateString()}
       </Table.Cell>
     </Table.Row>
   )
