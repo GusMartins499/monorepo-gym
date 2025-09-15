@@ -1,12 +1,15 @@
 'use client'
 
-import { Table } from "@chakra-ui/react";
+import { Button, Flex, Table, useDisclosure } from "@chakra-ui/react";
 import { IMCTableRow } from "./imc-table-row";
 import { ImcFilter } from "./imc-filter";
 import { useQuery } from "@tanstack/react-query";
 import { getImcs } from "../../lib/api/get-imcs";
+import { LuPlus } from "react-icons/lu";
+import { DialogCreateImc } from "../create-imc/dialog-create-imc";
 
 export function ImcTable() {
+  const { open, onOpen, onClose } = useDisclosure()
   const { data, isLoading } = useQuery({
     queryKey: ['imcs'],
     queryFn: getImcs
@@ -17,6 +20,12 @@ export function ImcTable() {
   return (
     <>
       <ImcFilter />
+      <Flex alignItems={'center'} justifyContent={'end'} mb='1.5rem'>
+        <Button bg='blue.500' onClick={onOpen}>
+          <LuPlus />
+          Avaliação
+        </Button>
+      </Flex>
       <Table.Root variant='outline' size="lg">
         <Table.Header bg="gray.50">
           <Table.Row>
@@ -46,6 +55,8 @@ export function ImcTable() {
           ))}
         </Table.Body>
       </Table.Root>
+
+      <DialogCreateImc open={open} onClose={onClose} />
     </>
   )
 }
