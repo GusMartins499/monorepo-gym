@@ -7,10 +7,11 @@ import {
   Spacer,
 } from '@chakra-ui/react'
 import NextLink from "next/link"
+import { NavItemUsersPage } from './nav-item-users-page'
 
 export function NavBar() {
   return (
-    <Box bg="white" px={8} py={4} shadow="sm" borderBottom="1px" borderColor="gray.200">
+    <Box bg="gray.100" px={8} py={4} shadow="sm" borderBottom="1px" borderColor="gray.200">
       <Flex align="center">
         <HStack>
           <ChakraLink
@@ -22,6 +23,7 @@ export function NavBar() {
           >
             <NextLink href="/">Home</NextLink>
           </ChakraLink>
+          <NavItemUsersPage />
         </HStack>
 
         <Spacer />

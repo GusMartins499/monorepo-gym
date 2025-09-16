@@ -1,5 +1,5 @@
 import { IconButton, Table, Text } from "@chakra-ui/react";
-import { LuPencil, LuTrash } from "react-icons/lu";
+import { LuPencil } from "react-icons/lu";
 import { useDialogStore } from "../../app/store/dialog-store";
 import { UpdateImcForm } from "../update-imc-form";
 import { useAuthStore } from "../../app/store/auth";

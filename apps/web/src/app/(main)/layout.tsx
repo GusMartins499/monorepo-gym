@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Providers from "./providers";
-import { DialogApp } from "../components/dialog-app";
+import "../globals.css";
+import Providers from "../providers";
+import { DialogApp } from "../../components/dialog-app";
+import { NavBar } from "../../components/nav-bar";
+import { Box } from "@chakra-ui/react";
 
 const InterSans = Inter({
   variable: "--font-inter-sans",
@@ -22,10 +24,14 @@ export default function RootLayout({
   return (
     <html lang="pt" suppressHydrationWarning>
       <body
-        className={`${InterSans.variable} antialiased`}
-      >
+        className={`${InterSans.variable} antialiased`}>
         <Providers>
-          {children}
+          <NavBar />
+          <Box minH="100vh" bg="gray.50">
+            <Box p={8}>
+              {children}
+            </Box>
+          </Box>
           <DialogApp />
         </Providers>
       </body>
