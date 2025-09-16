@@ -9,6 +9,7 @@ import { LuPlus } from "react-icons/lu";
 import { useDialogStore } from "../../app/store/dialog-store";
 import { CreateImcForm } from "../create-imc-form";
 import { useSearchParams } from "next/navigation";
+import { CreateUserForm } from "../create-user";
 
 export function ImcTable() {
   const searchParams = useSearchParams();
@@ -25,7 +26,13 @@ export function ImcTable() {
   return (
     <>
       <ImcFilter />
-      <Flex alignItems={'center'} justifyContent={'end'} mb='1.5rem'>
+      <Flex alignItems={'center'} justifyContent={'space-between'} mb='1.5rem'>
+        <Button bg='blue.500' onClick={() =>
+          openDialog("Adicionar usuário", <CreateUserForm />)
+        }>
+          <LuPlus />
+          Usuário
+        </Button>
         <Button bg='blue.500' onClick={() =>
           openDialog("Adicionar avaliação", <CreateImcForm />)
         }>

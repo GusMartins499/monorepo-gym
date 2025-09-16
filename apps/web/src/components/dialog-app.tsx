@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react"
 import { useDialogStore } from "../app/store/dialog-store"
 
-export function DialogImc() {
+export function DialogApp() {
   const { open, title, content, closeDialog } = useDialogStore()
 
   return (
