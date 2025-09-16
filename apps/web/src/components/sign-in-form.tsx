@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod/v4'
 import { redirect } from 'next/navigation'
 import { useLocalStorage } from '../hooks/use-local-store'
+import { useAuthStore } from '../app/store/auth'
 
 const signInForm = z.object({
   username: z.string(),
@@ -20,6 +21,7 @@ type SignInForm = z.infer<typeof signInForm>;
 
 export function LoginForm() {
   const [_, setToken] = useLocalStorage<string>("token", "");
+  const { setUser } = useAuthStore()
 
   const { register, handleSubmit } = useForm<SignInForm>({
     defaultValues: {
@@ -41,7 +43,7 @@ export function LoginForm() {
     }
     const responseJSON = await response.json()
     setToken(responseJSON.token);
-
+    setUser({ id: responseJSON.id, role: responseJSON.role })
     redirect('/');
   }
 

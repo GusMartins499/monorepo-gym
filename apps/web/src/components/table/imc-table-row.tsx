@@ -1,7 +1,8 @@
-import { IconButton, Table, Text, useDisclosure } from "@chakra-ui/react";
-import { LuPencil } from "react-icons/lu";
+import { IconButton, Table, Text } from "@chakra-ui/react";
+import { LuPencil, LuTrash } from "react-icons/lu";
 import { useDialogStore } from "../../app/store/dialog-store";
 import { UpdateImcForm } from "../update-imc-form";
+import { useAuthStore } from "../../app/store/auth";
 
 interface IMCTableRowProps {
   payload: {
@@ -19,6 +20,8 @@ interface IMCTableRowProps {
 
 export function IMCTableRow({ payload }: IMCTableRowProps) {
   const { openDialog } = useDialogStore()
+  const user = useAuthStore(({ user }) => user)
+  const isAdmin = user?.role === "ADMIN"
 
   return (
     <Table.Row key={payload.id} _hover={{ bg: "gray.50" }}>
@@ -52,6 +55,7 @@ export function IMCTableRow({ payload }: IMCTableRowProps) {
       </Table.Cell>
       <Table.Cell textAlign="center" fontWeight="600">
         <IconButton
+          marginX={2}
           size="xs"
           bg="orange.600"
           onClick={() =>
@@ -60,6 +64,17 @@ export function IMCTableRow({ payload }: IMCTableRowProps) {
         >
           <LuPencil />
         </IconButton>
+        {isAdmin ? (
+          <IconButton
+            size="xs"
+            bg="red.600"
+            onClick={() =>
+              openDialog("Editar avaliação", <UpdateImcForm payload={payload} />)
+            }
+          >
+            <LuTrash />
+          </IconButton>
+        ) : null}
       </Table.Cell>
     </Table.Row>
   )

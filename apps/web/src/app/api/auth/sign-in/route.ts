@@ -1,9 +1,18 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { api } from '../../../../lib/axios'
+import jwt from 'jsonwebtoken'
+import { env } from "../../../env/env";
+import { USER_ROLE } from "../../../utils/user-role";
+
 interface RequestBody {
   username: string
   password: string
+}
+
+interface TokenPayload {
+  id: string
+  role: USER_ROLE
 }
 
 export const POST = async (request: NextRequest) => {
@@ -27,8 +36,9 @@ export const POST = async (request: NextRequest) => {
       path: '/',
       sameSite: 'strict',
     })
+    const { id, role } = jwt.verify(token, env.JWT_SECRET) as TokenPayload
 
-    return NextResponse.json({ token }, { status: 200 });
+    return NextResponse.json({ token, id, role }, { status: 200 });
   } catch (error) {
     console.error("Auth error:", error);
     return NextResponse.json(
