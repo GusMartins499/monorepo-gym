@@ -1,6 +1,10 @@
 import { z } from "zod/v4";
 import { IMC_CLASSFICATION } from "../utils/constants";
 
+const querySearchSchema = z.object({
+  search: z.string().optional()
+})
+
 const updateImcSchema = z.object({
   height: z.coerce.number(),
   weight: z.coerce.number(),
@@ -31,6 +35,7 @@ type CreateImcDTO = z.infer<typeof createImcSchema>
 type updateImcDTO = z.infer<typeof updateImcSchema>
 type CreateImcRequestBodySchema = z.infer<typeof createImcRequestBodySchema>
 type UpdateImcRequestBodySchema = z.infer<typeof updateImcRequestBodySchema>
+type QuerySearchSchema = z.infer<typeof querySearchSchema>
 
 export {
   createImcSchema,
@@ -40,5 +45,7 @@ export {
   updateImcRequestBodySchema,
   UpdateImcRequestBodySchema,
   updateImcSchema,
-  updateImcDTO
+  updateImcDTO,
+  querySearchSchema,
+  QuerySearchSchema
 }

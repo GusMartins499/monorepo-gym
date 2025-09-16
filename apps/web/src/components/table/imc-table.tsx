@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Flex, Table, useDisclosure } from "@chakra-ui/react";
+import { Button, Flex, Table } from "@chakra-ui/react";
 import { IMCTableRow } from "./imc-table-row";
 import { ImcFilter } from "./imc-filter";
 import { useQuery } from "@tanstack/react-query";
@@ -8,13 +8,17 @@ import { getImcs } from "../../lib/api/get-imcs";
 import { LuPlus } from "react-icons/lu";
 import { useDialogStore } from "../../app/store/dialog-store";
 import { CreateImcForm } from "../create-imc-form";
+import { useSearchParams } from "next/navigation";
 
 export function ImcTable() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['imcs'],
-    queryFn: getImcs
-  })
+  const searchParams = useSearchParams();
+  const name = searchParams.get('name') ?? '';
   const { openDialog } = useDialogStore()
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['imcs', name],
+    queryFn: () => getImcs({ name })
+  })
 
   if (isLoading) return <p>Carregando...</p>
 

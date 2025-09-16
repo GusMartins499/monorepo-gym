@@ -12,8 +12,16 @@ interface GetImcResponse {
   studentId: string
 }
 
-export async function getImcs() {
-  const response = await clientAPI.get<GetImcResponse[]>('/imc')
+interface GetImcQuery {
+  name?: string | null
+}
+
+export async function getImcs({ name = '' }: GetImcQuery) {
+  const response = await clientAPI.get<GetImcResponse[]>('/imc', {
+    params: {
+      search: name
+    }
+  })
 
   return response.data
 }

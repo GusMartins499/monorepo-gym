@@ -3,6 +3,7 @@
 import { Box, Input, Field, Fieldset, Button, Flex } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const filterSchema = z.object({
   name: z.string(),
@@ -11,13 +12,22 @@ const filterSchema = z.object({
 type FilterSchema = z.infer<typeof filterSchema>
 
 export function ImcFilter() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { register, handleSubmit } = useForm<FilterSchema>({
     defaultValues: {
-      name: ''
+      name: searchParams.get('name') ?? ''
     }
   })
 
-  const handleFilter = ({ name }: FilterSchema) => { }
+  const handleFilter = ({ name }: FilterSchema) => {
+    if (!name.trim()) {
+      return router.push('/');
+    }
+    const params = new URLSearchParams(searchParams);
+    params.set('name', name);
+    router.push(`/?${params.toString()}`);
+  }
 
   return (
     <Box mb={6} as='form' onSubmit={handleSubmit(handleFilter)}>

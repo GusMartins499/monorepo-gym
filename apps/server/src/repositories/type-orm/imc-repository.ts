@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { IIMCRepository } from "../imc-repository";
 import { IMC } from "../../database/entity/IMC";
-import { CreateImcDTO, updateImcDTO } from "../../dtos/imc-dto";
+import { CreateImcDTO, QuerySearchSchema, updateImcDTO } from "../../dtos/imc-dto";
 
 export class IMCRepository implements IIMCRepository {
   constructor(private repository: Repository<IMC>) { }
@@ -26,31 +26,34 @@ export class IMCRepository implements IIMCRepository {
     await this.repository.delete(imc.id)
   }
 
-  async findAll(): Promise<IMC[]> {
-    return await this.repository.find({
-      relations: {
-        user: true,
-      }
-    })
+  async findAll(query: QuerySearchSchema): Promise<IMC[]> {
+    const qb = this.repository.createQueryBuilder("imc")
+      .leftJoinAndSelect("imc.user", "user");
+
+    if (query?.search) {
+      qb.where(
+        "user.name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE :name",
+        { name: `%${query.search}%` }
+      );
+    }
+
+    return qb.getMany();
   }
 
-  async findByProfessorId(id: string): Promise<IMC[]> {
-    const imcs = await this.repository.find({
-      where: {
-        user: {
-          professor: {
-            id
-          },
-        }
-      },
-      relations: {
-        user: true,
-      }
-    })
+  async findByProfessorId(id: string, query: QuerySearchSchema): Promise<IMC[]> {
+    const qb = this.repository.createQueryBuilder("imc")
+      .leftJoinAndSelect("imc.user", "user")
+      .leftJoin("user.professor", "professor")
+      .where("professor.id = :id", { id });
 
-    if (imcs.length <= 0) return []
+    if (query?.search) {
+      qb.andWhere(
+        "user.name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE :name",
+        { name: `%${query.search}%` }
+      );
+    }
 
-    return imcs
+    return qb.getMany();
   }
 
   async update(id: string, imcDTO: updateImcDTO): Promise<IMC | null> {
