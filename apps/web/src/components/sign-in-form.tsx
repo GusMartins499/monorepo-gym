@@ -5,6 +5,10 @@ import {
   Field,
   Input,
   Button,
+  Box,
+  Flex,
+  Heading,
+  Stack,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod/v4'
@@ -42,30 +46,47 @@ export function LoginForm() {
       return console.error("Erro na autenticação");
     }
     const responseJSON = await response.json()
+
     setToken(responseJSON.token);
     setUser({ id: responseJSON.id, role: responseJSON.role })
     redirect('/');
   }
 
   return (
-    <form onSubmit={handleSubmit(handleSignIn)}>
-      <Fieldset.Root size="lg" maxW="xl">
-        <Fieldset.Content>
-          <Field.Root>
-            <Field.Label>Usuário</Field.Label>
-            <Input {...register('username')} />
-          </Field.Root>
-
-          <Field.Root>
-            <Field.Label>Senha</Field.Label>
-            <Input type="password" {...register('password')} />
-          </Field.Root>
-        </Fieldset.Content>
-
-        <Button type="submit" w='full'>
-          Entrar
-        </Button>
-      </Fieldset.Root>
-    </form>
+    <Flex minH="100vh" align="center" justify="center" bg="gray.50">
+      <Box
+        as="form"
+        onSubmit={handleSubmit(handleSignIn)}
+        bg="white"
+        p={8}
+        rounded="xl"
+        boxShadow="lg"
+        w="full"
+        maxW="md"
+      >
+        <Stack>
+          <Heading size="lg" textAlign="center" color="gray.700">
+            Acessar Sistema
+          </Heading>
+          <Fieldset.Root size="lg" maxW="xl">
+            <Field.Root>
+              <Fieldset.Content>
+                <Field.Root>
+                  <Field.Label>Usuário</Field.Label>
+                  <Input {...register('username')} placeholder="Digite seu usuário" />
+                </Field.Root>
+                <Field.Root>
+                  <Field.Label>Senha</Field.Label>
+                  <Input type='password' {...register('password')} />
+                </Field.Root>
+              </Fieldset.Content>
+            </Field.Root>
+            <Button type="submit" bg='blue.500' size="lg" w="full">
+              Entrar
+            </Button>
+          </Fieldset.Root>
+        </Stack>
+      </Box>
+    </Flex>
   )
 }

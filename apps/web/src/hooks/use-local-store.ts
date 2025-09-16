@@ -5,7 +5,13 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     if (typeof window === "undefined") return initialValue;
     try {
       const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : initialValue;
+      if (!item) return initialValue;
+
+      if (typeof initialValue === 'string') {
+        return item as T;
+      }
+
+      return JSON.parse(item) as T;
     } catch {
       return initialValue;
     }
@@ -15,7 +21,11 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     try {
       setStoredValue(value);
       if (typeof window !== "undefined") {
-        window.localStorage.setItem(key, JSON.stringify(value));
+        if (typeof value === 'string') {
+          window.localStorage.setItem(key, value);
+        } else {
+          window.localStorage.setItem(key, JSON.stringify(value));
+        }
       }
     } catch {
       console.log('Erro ao salvar no localStorage')
