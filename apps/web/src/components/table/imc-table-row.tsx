@@ -42,10 +42,12 @@ export function IMCTableRow({ payload }: IMCTableRowProps) {
         <Text
           fontWeight="600"
           color={
-            payload.classification === 'NORMAL' ? 'green.600' :
-              payload.classification === 'OVERWEIGHT' ? 'orange.600' :
-                payload.classification === 'OBESE_I' ? 'red.600' :
-                  'gray.600'
+            payload.classification === 'UNDERWEIGHT' ? 'gray.400' :
+              payload.classification === 'NORMAL' ? 'green.400' :
+                payload.classification === 'OVERWEIGHT' ? 'yellow.600' :
+                  payload.classification === 'OBESE_I' ? 'orange.500' :
+                    payload.classification === 'OBESE_II' ? 'orange.700' :
+                      payload.classification === 'OBESE_III' ? 'red.600' : 'gray.600'
           }
         >
           {payload.classificationLabel}
