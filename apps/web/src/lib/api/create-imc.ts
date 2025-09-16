@@ -2,8 +2,8 @@ import { clientAPI } from "../client-axios"
 
 interface CreateImcProps {
   userId: string
-  weight: number
-  height: number
+  weight: string
+  height: string
 }
 
 interface CreateImcResponse {

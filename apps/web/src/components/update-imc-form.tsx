@@ -4,6 +4,9 @@ import { Fieldset, Field, Input, Button } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4"
+import { updateImc } from "../lib/api/update-imc";
+import { queryClient } from "../lib/tankstack-client";
+import { useDialogStore } from "../app/store/dialog-store";
 
 interface UpdateImcFormProps {
   payload: {
@@ -20,23 +23,37 @@ interface UpdateImcFormProps {
 }
 
 const updateImcSchema = z.object({
-  userId: z.string(),
-  height: z.number(),
-  weight: z.number()
+  height: z.string(),
+  weight: z.string()
 })
 
 type UpdateImcSchema = z.infer<typeof updateImcSchema>
 
 export function UpdateImcForm({ payload }: UpdateImcFormProps) {
+  const { closeDialog } = useDialogStore()
+
   const { register, handleSubmit } = useForm<UpdateImcSchema>({
     defaultValues: {
-      height: 0,
-      weight: 0,
-      userId: ''
+      height: payload.height,
+      weight: payload.weight,
     }
   })
 
-  const handleImc = async ({ userId, height, weight }: UpdateImcSchema) => { }
+  const { mutateAsync } = useMutation({
+    mutationFn: updateImc,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['imcs'] })
+    }
+  })
+
+  const handleImc = async ({ height, weight }: UpdateImcSchema) => {
+    mutateAsync({
+      id: payload.id,
+      height,
+      weight
+    })
+    closeDialog()
+  }
 
   return (
     <form onSubmit={handleSubmit(handleImc)}>
@@ -44,12 +61,22 @@ export function UpdateImcForm({ payload }: UpdateImcFormProps) {
         <Fieldset.Content>
           <Field.Root color='gray.900'>
             <Field.Label>Altura</Field.Label>
-            <Input {...register('height')} />
+            <Input
+              {...register("height", {
+                setValueAs: (v) =>
+                  v === "" ? undefined : Number(String(v).replace(",", "."))
+              })}
+            />
           </Field.Root>
 
           <Field.Root color='gray.900'>
             <Field.Label>Peso</Field.Label>
-            <Input {...register('weight')} />
+            <Input
+              {...register("weight", {
+                setValueAs: (v) =>
+                  v === "" ? undefined : Number(String(v).replace(",", "."))
+              })}
+            />
           </Field.Root>
         </Fieldset.Content>
 

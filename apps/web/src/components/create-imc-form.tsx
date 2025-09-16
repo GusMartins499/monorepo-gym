@@ -8,20 +8,23 @@ import { useMemo } from "react";
 import { createImc } from "../lib/api/create-imc";
 import { getStudents } from "../lib/api/get-users";
 import { queryClient } from "../lib/tankstack-client";
+import { useDialogStore } from "../app/store/dialog-store";
 
 const createImcSchema = z.object({
   userId: z.string(),
-  height: z.number(),
-  weight: z.number()
+  height: z.string(),
+  weight: z.string()
 })
 
 type CreateImcSchema = z.infer<typeof createImcSchema>
 
 export function CreateImcForm() {
+  const { closeDialog } = useDialogStore()
+
   const { register, handleSubmit } = useForm<CreateImcSchema>({
     defaultValues: {
-      height: 0,
-      weight: 0,
+      height: '',
+      weight: '',
       userId: ''
     }
   })
@@ -48,9 +51,10 @@ export function CreateImcForm() {
   const handleImc = async ({ userId, height, weight }: CreateImcSchema) => {
     mutateAsync({
       userId,
-      height: Number(height),
-      weight: Number(weight)
+      height,
+      weight
     })
+    closeDialog()
   }
   return (
     <form onSubmit={handleSubmit(handleImc)}>
@@ -84,12 +88,22 @@ export function CreateImcForm() {
           </Field.Root>
           <Field.Root color='gray.900'>
             <Field.Label>Altura</Field.Label>
-            <Input {...register('height')} />
+            <Input
+              {...register("height", {
+                setValueAs: (v) =>
+                  v === "" ? undefined : Number(String(v).replace(",", "."))
+              })}
+            />
           </Field.Root>
 
           <Field.Root color='gray.900'>
             <Field.Label>Peso</Field.Label>
-            <Input {...register('weight')} />
+            <Input
+              {...register("weight", {
+                setValueAs: (v) =>
+                  v === "" ? undefined : Number(String(v).replace(",", "."))
+              })}
+            />
           </Field.Root>
         </Fieldset.Content>
 

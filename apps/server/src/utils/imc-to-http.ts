@@ -32,7 +32,7 @@ export function toHTTP(imc: IMCToHTTP) {
     classificationLabel: mapImcClassificationToLabel(imc.classification),
     classification: imc.classification,
     createdAt: dayjs(imc.createdAt).format('DD/MM/YYYY'),
-    student: imc.user.name,
-    studentId: imc.user.id
+    student: imc.user ? imc.user.name : null,
+    studentId: imc.user ? imc.user.id : null
   }
 }

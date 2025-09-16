@@ -19,9 +19,6 @@ export class UpdateIMCService {
 
     if (!updatedImc) return null
 
-    return {
-      ...updatedImc,
-      classification: mapImcClassificationToLabel(updatedImc.classification)
-    }
+    return updatedImc
   }
 }
