@@ -5,6 +5,8 @@ import { requireProfessorOrAdmin } from "../../middleware/require-professor-or-a
 import { createImc } from "./create";
 import { updateImc } from "./update";
 import { findImc } from "./find";
+import { requireAdmin } from "../../middleware/require-admin";
+import { deleteImcRoute } from "./delete";
 
 const imcRoutes: Router = Router();
 
@@ -12,5 +14,6 @@ imcRoutes.post('/', verifyJWT, requireProfessorOrAdmin, createImc)
 imcRoutes.put('/:id', verifyJWT, requireProfessorOrAdmin, updateImc)
 imcRoutes.get('/:id', verifyJWT, findByUserId)
 imcRoutes.get('/', verifyJWT, findImc)
+imcRoutes.delete('/:id', verifyJWT, requireAdmin, deleteImcRoute)
 
 export { imcRoutes }

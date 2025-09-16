@@ -7,4 +7,6 @@ export interface IIMCRepository {
   update(id: string, imcDTO: updateImcDTO): Promise<IMC | null>
   findByProfessorId(id: string): Promise<IMC[]>
   findAll(): Promise<IMC[]>
+  deleteById(id: string): Promise<void>
+  findById(id: string): Promise<IMC | null>
 }

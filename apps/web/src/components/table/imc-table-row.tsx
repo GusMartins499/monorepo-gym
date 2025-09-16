@@ -3,6 +3,7 @@ import { LuPencil, LuTrash } from "react-icons/lu";
 import { useDialogStore } from "../../app/store/dialog-store";
 import { UpdateImcForm } from "../update-imc-form";
 import { useAuthStore } from "../../app/store/auth";
+import { DeleteImc } from "./delete-imc-button";
 
 interface IMCTableRowProps {
   payload: {
@@ -65,15 +66,7 @@ export function IMCTableRow({ payload }: IMCTableRowProps) {
           <LuPencil />
         </IconButton>
         {isAdmin ? (
-          <IconButton
-            size="xs"
-            bg="red.600"
-            onClick={() =>
-              openDialog("Editar avaliação", <UpdateImcForm payload={payload} />)
-            }
-          >
-            <LuTrash />
-          </IconButton>
+          <DeleteImc id={payload.id} />
         ) : null}
       </Table.Cell>
     </Table.Row>
