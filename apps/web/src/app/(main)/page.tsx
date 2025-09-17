@@ -1,5 +1,5 @@
 import { Box, Text } from "@chakra-ui/react";
-import { ImcTable } from "../../components/table/imc-table";
+import { ImcTable } from "../../components/imc-table/imc-table";
 
 export default function Home() {
   return (
