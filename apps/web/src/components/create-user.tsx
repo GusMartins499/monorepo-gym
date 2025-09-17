@@ -6,8 +6,11 @@ import { z } from "zod/v4";
 import { USER_ROLE } from "../app/utils/user-role";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createUser } from "../lib/api/create-user";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useDialogStore } from "../app/store/dialog-store";
+import { useAuthStore } from "../app/store/auth";
+import { getProfessors } from "../lib/api/get-professors";
+import { useMemo } from "react";
 
 const userRoles = createListCollection({
   items: [
@@ -27,12 +30,15 @@ const createUserSchema = z.object({
   password: z.string()
     .min(6, 'Senha deve ter pelo menos 6 caracteres'),
   role: z.enum(USER_ROLE),
+  professorId: z.string()
 })
 
 type CreateUserSchema = z.infer<typeof createUserSchema>
 
 export function CreateUserForm() {
   const { closeDialog } = useDialogStore()
+  const user = useAuthStore(({ user }) => user)
+  const isProfessor = user?.role === USER_ROLE.PROFESSOR
 
   const { register, handleSubmit, formState: { errors } } = useForm<CreateUserSchema>({
     resolver: zodResolver(createUserSchema),
@@ -40,20 +46,36 @@ export function CreateUserForm() {
       name: '',
       username: '',
       password: '',
+      role: USER_ROLE.STUDENT,
+      professorId: isProfessor ? user.id : ''
     },
   })
+
+  const { data: professorList } = useQuery({
+    queryKey: ['professors'],
+    queryFn: getProfessors,
+    enabled: !isProfessor
+  })
+
+  const professors = useMemo(() => {
+    return createListCollection({
+      items: professorList?.map(({ id, name }) => ({ label: name, value: id })) ?? [],
+    })
+  }, [professorList])
 
   const { mutateAsync } = useMutation({
     mutationFn: createUser,
     onSuccess: () => { closeDialog() }
   })
 
-  const handleCreateUser = ({ name, password, role, username }: CreateUserSchema) => {
+
+  const handleCreateUser = ({ name, password, role, username, professorId }: CreateUserSchema) => {
     mutateAsync({
       name,
       username,
       password,
-      role
+      role,
+      professorId
     })
   }
 
@@ -77,7 +99,13 @@ export function CreateUserForm() {
             <span>{errors.password?.message}</span>
           </Field.Root>
           <Field.Root required>
-            <Select.Root collection={userRoles} {...register('role')} required>
+            <Select.Root
+              collection={userRoles}
+              {...register('role')}
+              required
+              defaultValue={[USER_ROLE.STUDENT]}
+              disabled={isProfessor}
+            >
               <Select.HiddenSelect />
               <Select.Label color='gray.900'>Perfil de acesso <Field.RequiredIndicator /></Select.Label>
 
@@ -102,6 +130,40 @@ export function CreateUserForm() {
               </Select.Positioner>
             </Select.Root>
             <span>{errors.role?.message}</span>
+          </Field.Root>
+
+          <Field.Root required>
+            <Select.Root
+              collection={professors}
+              {...register('professorId')}
+              required
+              defaultValue={[user!.id]}
+              disabled={isProfessor}
+            >
+              <Select.HiddenSelect />
+              <Select.Label color='gray.900'>Professor <Field.RequiredIndicator /></Select.Label>
+
+              <Select.Control color='gray.900'>
+                <Select.Trigger>
+                  <Select.ValueText placeholder="Selecione o perfil" />
+                </Select.Trigger>
+                <Select.IndicatorGroup>
+                  <Select.Indicator />
+                </Select.IndicatorGroup>
+              </Select.Control>
+
+              <Select.Positioner>
+                <Select.Content color='gray.900'>
+                  {professors.items.map((role) => (
+                    <Select.Item item={role} key={role.value}>
+                      {role.label}
+                      <Select.ItemIndicator />
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select.Positioner>
+            </Select.Root>
+            <span>{errors.professorId?.message}</span>
           </Field.Root>
         </Fieldset.Content>
 

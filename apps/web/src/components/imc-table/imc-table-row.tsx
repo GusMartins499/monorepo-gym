@@ -4,6 +4,7 @@ import { useDialogStore } from "../../app/store/dialog-store";
 import { UpdateImcForm } from "../update-imc-form";
 import { useAuthStore } from "../../app/store/auth";
 import { DeleteImc } from "./delete-imc-button";
+import { USER_ROLE } from "../../app/utils/user-role";
 
 interface IMCTableRowProps {
   payload: {
@@ -22,7 +23,7 @@ interface IMCTableRowProps {
 export function IMCTableRow({ payload }: IMCTableRowProps) {
   const { openDialog } = useDialogStore()
   const user = useAuthStore(({ user }) => user)
-  const isAdmin = user?.role === "ADMIN"
+  const isAdmin = user?.role === USER_ROLE.ADMIN
 
   return (
     <Table.Row key={payload.id} _hover={{ bg: "gray.50" }}>

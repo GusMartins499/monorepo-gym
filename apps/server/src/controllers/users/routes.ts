@@ -9,6 +9,7 @@ import { deleteUserRoute } from "./delete-user";
 import { findStudents } from "./find-students";
 import { findUsers } from "./find";
 import { patchUser } from "./patch-user";
+import { findProfessors } from "./find-professors";
 
 const usersRoutes: Router = Router();
 
@@ -19,5 +20,6 @@ usersRoutes.post('/authenticate', authenticateUser)
 usersRoutes.get('/students', verifyJWT, requireProfessorOrAdmin, findStudents)
 usersRoutes.get('/', verifyJWT, requireAdmin, findUsers)
 usersRoutes.patch('/:id', verifyJWT, requireAdmin, patchUser)
+usersRoutes.get('/professors', verifyJWT, requireAdmin, findProfessors)
 
 export { usersRoutes }

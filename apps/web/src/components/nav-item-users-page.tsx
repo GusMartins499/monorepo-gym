@@ -3,10 +3,11 @@
 import { Link as ChakraLink } from '@chakra-ui/react'
 import NextLink from "next/link"
 import { useAuthStore } from '../app/store/auth'
+import { USER_ROLE } from '../app/utils/user-role'
 
 export function NavItemUsersPage() {
   const user = useAuthStore(({ user }) => user)
-  const isAdmin = user?.role === "ADMIN"
+  const isAdmin = user?.role === USER_ROLE.ADMIN
 
   if (isAdmin) {
     return (

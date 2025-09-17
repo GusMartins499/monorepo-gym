@@ -16,7 +16,8 @@ const createUserSchema = z.object({
   }),
   status: z.enum(USER_STATUS, {
     error: () => ({ message: 'Status deve ser ACTIVE ou INACTIVE' })
-  }).default(USER_STATUS.ACTIVE)
+  }).default(USER_STATUS.ACTIVE),
+  professorId: z.string()
 });
 
 const updateUserSchema = z.object({

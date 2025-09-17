@@ -6,6 +6,7 @@ interface CreateUserProps {
   username: string
   password: string
   role: USER_ROLE
+  professorId: string | null
 }
 
 interface CreateUserResponse {
@@ -16,12 +17,13 @@ interface CreateUserResponse {
   role: USER_ROLE
 }
 
-export async function createUser({ name, username, password, role }: CreateUserProps) {
+export async function createUser({ name, username, password, role, professorId }: CreateUserProps) {
   const response = await clientAPI.post<CreateUserResponse>('/users', {
     name,
     username,
     password,
-    role
+    role,
+    professorId
   })
 
   return response.data

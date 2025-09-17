@@ -8,6 +8,23 @@ import { USER_ROLE } from "../../utils/constants";
 export class UsersRepository implements IUsersRepository {
   constructor(private repository: Repository<User>) { }
 
+  async findProfessors(): Promise<User[] | null> {
+    const professors = await this.repository.find({
+      where: {
+        role: USER_ROLE.PROFESSOR,
+        status: USER_STATUS.ACTIVE
+      },
+      select: {
+        id: true,
+        name: true
+      }
+    })
+
+    if (!professors) return null
+
+    return professors
+  }
+
   async patchUser(userId: string): Promise<User | null> {
     const user = await this.repository.findOne({
       where: {
@@ -42,7 +59,8 @@ export class UsersRepository implements IUsersRepository {
         professor: {
           id
         },
-        role: USER_ROLE.STUDENT
+        role: USER_ROLE.STUDENT,
+        status: USER_STATUS.ACTIVE
       }
     })
 
@@ -58,7 +76,8 @@ export class UsersRepository implements IUsersRepository {
         name: true,
       },
       where: {
-        role: USER_ROLE.STUDENT
+        role: USER_ROLE.STUDENT,
+        status: USER_STATUS.ACTIVE
       }
     })
   }
@@ -108,7 +127,14 @@ export class UsersRepository implements IUsersRepository {
   }
 
   async create(userDTO: CreateUserDTO): Promise<UserResponseDTO> {
-    const newUserInstance = this.repository.create(userDTO);
+    const newUserInstance = this.repository.create({
+      name: userDTO.name,
+      username: userDTO.username,
+      password: userDTO.password,
+      role: userDTO.role,
+      status: userDTO.status,
+      professor: { id: userDTO.professorId }
+    });
 
     const user = await this.repository.save(newUserInstance);
 

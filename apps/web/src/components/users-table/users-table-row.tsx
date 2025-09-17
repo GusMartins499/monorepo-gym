@@ -32,6 +32,8 @@ export function UsersTableRow({ payload }: UsersTableRowProps) {
     mutationFn: patchUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })
+      queryClient.invalidateQueries({ queryKey: ['students'] })
+      queryClient.invalidateQueries({ queryKey: ['professors'] })
     },
     onError: (error) => {
       return toaster.error({ description: error?.response?.data?.error?.message, type: "error" })

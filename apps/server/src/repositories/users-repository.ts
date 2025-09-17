@@ -12,4 +12,5 @@ export interface IUsersRepository {
   findAllStudents(): Promise<User[]>
   findAll(): Promise<User[]>
   patchUser(userId: string): Promise<User | null>
+  findProfessors(): Promise<User[] | null>
 }
