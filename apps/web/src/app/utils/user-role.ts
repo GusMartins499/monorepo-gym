@@ -3,3 +3,9 @@ export enum USER_ROLE {
   STUDENT = 'STUDENT',
   PROFESSOR = 'PROFESSOR'
 }
+
+export const USER_STATUS_TO_LABEL: Record<USER_ROLE, string> = {
+  [USER_ROLE.ADMIN]: 'administrador',
+  [USER_ROLE.PROFESSOR]: 'Professor',
+  [USER_ROLE.STUDENT]: 'Aluno',
+}

@@ -1,12 +1,12 @@
 import { AppDataSource } from "../database/data-source"
 import { User } from "../database/entity/User"
 import { UsersRepository } from "../repositories/type-orm/users-repository"
-import { FindUsersService } from "../services/find-users-service"
+import { FindStudentsService } from "../services/find-students-service"
 
-export function makeFindUsers() {
+export function makeFindStudents() {
   const userRepository = new UsersRepository(AppDataSource.getRepository(User))
 
-  const service = new FindUsersService(userRepository)
+  const service = new FindStudentsService(userRepository)
 
   return service
 }

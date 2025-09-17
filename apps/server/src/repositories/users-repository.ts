@@ -8,6 +8,7 @@ export interface IUsersRepository {
   update(id: string, updateDTO: UpdateUserDTO): Promise<UserResponseDTO | null>;
   findById(userId: string): Promise<UserResponseDTO | null>
   delete(userId: string): Promise<void>
-  findByProfessorId(id: string): Promise<User[]>
+  findStudentsByProfessorId(id: string): Promise<User[]>
+  findAllStudents(): Promise<User[]>
   findAll(): Promise<User[]>
 }

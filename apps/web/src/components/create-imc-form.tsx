@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod/v4"
 import { useMemo } from "react";
 import { createImc } from "../lib/api/create-imc";
-import { getStudents } from "../lib/api/get-users";
+import { getStudents } from "../lib/api/get-students";
 import { queryClient } from "../lib/tankstack-client";
 import { useDialogStore } from "../app/store/dialog-store";
 

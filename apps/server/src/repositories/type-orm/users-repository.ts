@@ -8,7 +8,19 @@ import { USER_ROLE } from "../../utils/constants";
 export class UsersRepository implements IUsersRepository {
   constructor(private repository: Repository<User>) { }
 
-  async findByProfessorId(id: string): Promise<User[]> {
+  async findAll(): Promise<User[]> {
+    return await this.repository.find({
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        role: true,
+        status: true,
+      },
+    })
+  }
+
+  async findStudentsByProfessorId(id: string): Promise<User[]> {
     const users = await this.repository.find({
       where: {
         professor: {
@@ -23,7 +35,7 @@ export class UsersRepository implements IUsersRepository {
     return users
   }
 
-  async findAll(): Promise<User[]> {
+  async findAllStudents(): Promise<User[]> {
     return await this.repository.find({
       select: {
         id: true,

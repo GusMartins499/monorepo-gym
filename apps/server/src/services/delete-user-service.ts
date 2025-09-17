@@ -1,3 +1,4 @@
+import { UserHasIMC } from "../errors/user-has-imc";
 import { UserNotFound } from "../errors/user-not-found";
 import { IIMCRepository } from "../repositories/imc-repository";
 import { IUsersRepository } from "../repositories/users-repository";
@@ -15,7 +16,11 @@ export class DeleteUserService {
       throw new UserNotFound()
     }
 
-    await this.imcRepository.findByUserId(userId)
+    const hasImc = await this.imcRepository.findByUserId(userId)
+
+    if (hasImc) {
+      throw new UserHasIMC()
+    }
 
     await this.repository.delete(userId)
   }
