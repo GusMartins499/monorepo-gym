@@ -85,14 +85,10 @@ export class IMCRepository implements IIMCRepository {
   }
 
   async findByUserId(userId: string): Promise<IMC[] | null> {
-    const imcs = await this.repository.find({
-      where: {
-        idUserIMC: userId
-      }
-    })
+    const qb = this.repository.createQueryBuilder("imc")
+      .leftJoinAndSelect("imc.user", "user")
+      .where("user.id = :id", { id: userId })
 
-    if (imcs.length <= 0) return null
-
-    return imcs
+    return qb.getMany();
   }
 }
