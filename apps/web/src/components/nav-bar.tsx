@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react'
 import NextLink from "next/link"
 import { NavItemUsersPage } from './nav-item-users-page'
+import { SignOutButton } from './sign-out-button'
 
 export function NavBar() {
   return (
@@ -28,17 +29,7 @@ export function NavBar() {
 
         <Spacer />
 
-        <Button
-          bg="blue.400"
-          color="white"
-          size="md"
-          borderRadius="md"
-          px={6}
-          _hover={{ bg: "blue.500" }}
-          _active={{ bg: "blue.600" }}
-        >
-          Sign Out
-        </Button>
+        <SignOutButton />
       </Flex>
     </Box>
   )
