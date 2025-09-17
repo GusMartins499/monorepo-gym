@@ -8,7 +8,7 @@ import { USER_ROLE } from "../../utils/constants";
 export class UsersRepository implements IUsersRepository {
   constructor(private repository: Repository<User>) { }
 
-  async inactiveUser(userId: string): Promise<User | null> {
+  async patchUser(userId: string): Promise<User | null> {
     const user = await this.repository.findOne({
       where: {
         id: userId
@@ -17,7 +17,9 @@ export class UsersRepository implements IUsersRepository {
 
     if (!user) return null
 
-    user.status = USER_STATUS.INACTIVE
+    const currentStatus = user.status
+    const updateStatus = currentStatus === USER_STATUS.ACTIVE ? USER_STATUS.INACTIVE : USER_STATUS.ACTIVE
+    user.status = updateStatus
 
     return await this.repository.save(user)
   }

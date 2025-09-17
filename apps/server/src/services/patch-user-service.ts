@@ -13,6 +13,6 @@ export class InactiveUSerService {
       throw new UserNotFound()
     }
 
-    return await this.repository.inactiveUser(userId)
+    return await this.repository.patchUser(userId)
   }
 }

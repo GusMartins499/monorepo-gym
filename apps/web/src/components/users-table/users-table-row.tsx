@@ -1,12 +1,12 @@
-import { Button, IconButton, Table } from "@chakra-ui/react";
-import { LuTrash, LuUserX } from "react-icons/lu";
+import { Button, Flex, IconButton, Table } from "@chakra-ui/react";
+import { LuTrash, LuUserCheck, LuUserX } from "react-icons/lu";
 import { USER_ROLE, USER_ROLE_TO_LABEL } from "../../app/utils/user-role";
 import { deleteUser } from "../../lib/api/delete-user";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../../lib/tankstack-client";
 import { toaster } from "../ui/toaster";
 import { USER_STATUS, USER_STATUS_TO_LABEL } from "../../app/utils/user-status";
-import { inactiveUser } from "../../lib/api/inactive-user";
+import { patchUser } from "../../lib/api/patch-user";
 
 interface UsersTableRowProps {
   payload: {
@@ -28,8 +28,8 @@ export function UsersTableRow({ payload }: UsersTableRowProps) {
       return toaster.error({ description: error?.response?.data?.error?.message, type: "error" })
     }
   })
-  const { mutateAsync: inactiveUserFn } = useMutation({
-    mutationFn: inactiveUser,
+  const { mutateAsync: patchUserFn } = useMutation({
+    mutationFn: patchUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })
     },
@@ -42,8 +42,8 @@ export function UsersTableRow({ payload }: UsersTableRowProps) {
     deleteUserFn({ id: payload.id })
   }
 
-  const handleInactiveUser = () => {
-    inactiveUserFn({ id: payload.id })
+  const handlePatchUser = () => {
+    patchUserFn({ id: payload.id })
   }
 
   return (
@@ -61,21 +61,29 @@ export function UsersTableRow({ payload }: UsersTableRowProps) {
         {USER_STATUS_TO_LABEL[payload.status]}
       </Table.Cell>
       <Table.Cell textAlign="center" fontWeight="600">
-        <Button
-          onClick={handleInactiveUser}
-          bg='red.500'
-          marginX={2}
-          disabled={payload.status === USER_STATUS.INACTIVE}>
-          <LuUserX />
-          Inativar
-        </Button>
-        <IconButton
-          size="md"
-          bg="red.500"
-          onClick={handleDeleteUser}
-        >
-          <LuTrash />
-        </IconButton>
+        <Flex alignItems={'center'} justifyContent={'center'} gap={2}>
+          <Button
+            onClick={handlePatchUser}
+            bg='orange.500'
+            disabled={payload.status === USER_STATUS.INACTIVE}>
+            <LuUserX />
+            Inativar
+          </Button>
+          <Button
+            onClick={handlePatchUser}
+            bg='green.500'
+            disabled={payload.status === USER_STATUS.ACTIVE}>
+            <LuUserCheck />
+            Ativar
+          </Button>
+          <IconButton
+            size="md"
+            bg="red.500"
+            onClick={handleDeleteUser}
+          >
+            <LuTrash />
+          </IconButton>
+        </Flex>
       </Table.Cell>
     </Table.Row>
   )
