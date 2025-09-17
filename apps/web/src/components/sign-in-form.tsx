@@ -15,6 +15,7 @@ import { z } from 'zod/v4'
 import { redirect } from 'next/navigation'
 import { useLocalStorage } from '../hooks/use-local-store'
 import { useAuthStore } from '../app/store/auth'
+import { toaster } from './ui/toaster'
 
 const signInForm = z.object({
   username: z.string(),
@@ -42,11 +43,11 @@ export function LoginForm() {
       },
       body: JSON.stringify(data)
     })
-    if (!response.ok) {
-      return console.error("Erro na autenticação");
-    }
     const responseJSON = await response.json()
 
+    if (!response.ok) {
+      return toaster.error({ description: responseJSON.error, type: "error" })
+    }
     setToken(responseJSON.token);
     setUser({ id: responseJSON.id, role: responseJSON.role })
     redirect('/');

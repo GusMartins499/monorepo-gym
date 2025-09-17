@@ -8,6 +8,7 @@ import { requireAdmin } from "../../middleware/require-admin";
 import { deleteUserRoute } from "./delete-user";
 import { findStudents } from "./find-students";
 import { findUsers } from "./find";
+import { inactiveUser } from "./inactive-user";
 
 const usersRoutes: Router = Router();
 
@@ -17,5 +18,6 @@ usersRoutes.delete('/:id', verifyJWT, requireAdmin, deleteUserRoute)
 usersRoutes.post('/authenticate', authenticateUser)
 usersRoutes.get('/students', verifyJWT, requireProfessorOrAdmin, findStudents)
 usersRoutes.get('/', verifyJWT, requireAdmin, findUsers)
+usersRoutes.patch('/:id/inactive', verifyJWT, requireAdmin, inactiveUser)
 
 export { usersRoutes }

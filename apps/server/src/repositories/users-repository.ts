@@ -11,4 +11,5 @@ export interface IUsersRepository {
   findStudentsByProfessorId(id: string): Promise<User[]>
   findAllStudents(): Promise<User[]>
   findAll(): Promise<User[]>
+  inactiveUser(userId: string): Promise<User | null>
 }

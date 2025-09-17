@@ -7,6 +7,8 @@ import { JWT_EXPIRES_IN_15_MINUTES_IN_SECONDS, JWT_EXPIRES_IN_7_DAYS_IN_SECONDS 
 import { IAuthRepository } from '../repositories/auth-repository';
 import dayjs from 'dayjs';
 import { env } from '../env/env';
+import { USER_STATUS } from '../database/entity/User';
+import { UserInactive } from '../errors/inactive-user';
 
 export class AuthenticateUserService {
   constructor(
@@ -19,6 +21,10 @@ export class AuthenticateUserService {
 
     if (!user) {
       throw new WrongCredentials()
+    }
+
+    if (user.status === USER_STATUS.INACTIVE) {
+      throw new UserInactive()
     }
 
     const passwordMatch = await compare(password, user.password);

@@ -4,6 +4,7 @@ import { api } from '../../../../lib/axios'
 import jwt from 'jsonwebtoken'
 import { env } from "../../../env/env";
 import { USER_ROLE } from "../../../utils/user-role";
+import { AxiosError } from "axios";
 
 interface RequestBody {
   username: string
@@ -40,10 +41,7 @@ export const POST = async (request: NextRequest) => {
 
     return NextResponse.json({ token, id, role }, { status: 200 });
   } catch (error) {
-    console.error("Auth error:", error);
-    return NextResponse.json(
-      { error: "Authentication failed" },
-      { status: 500 }
+    return NextResponse.json({ error: error.response.data.error.message }, { status: 500 }
     );
   }
 }

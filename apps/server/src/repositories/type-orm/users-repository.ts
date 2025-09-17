@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { User } from "../../database/entity/User";
+import { User, USER_STATUS } from "../../database/entity/User";
 import { IUsersRepository } from "../users-repository";
 import { CreateUserDTO, UpdateUserDTO } from "../../dtos/create-user-dto";
 import { UserResponseDTO } from "../../dtos/user-response-dto";
@@ -7,6 +7,20 @@ import { USER_ROLE } from "../../utils/constants";
 
 export class UsersRepository implements IUsersRepository {
   constructor(private repository: Repository<User>) { }
+
+  async inactiveUser(userId: string): Promise<User | null> {
+    const user = await this.repository.findOne({
+      where: {
+        id: userId
+      }
+    })
+
+    if (!user) return null
+
+    user.status = USER_STATUS.INACTIVE
+
+    return await this.repository.save(user)
+  }
 
   async findAll(): Promise<User[]> {
     return await this.repository.find({
