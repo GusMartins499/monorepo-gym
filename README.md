@@ -1,12 +1,12 @@
 # 📌 Requisitos Funcionais
 
-- [ ] O sistema deve permitir o **cadastro de usuários** com os perfis:
+- [x] O sistema deve permitir o **cadastro de usuários** com os perfis:
   - Administrador
   - Aluno
   - Professor
-- [ ] Deve ser possível **ativar ou inativar** um usuário.
-- [ ] O sistema deve permitir o **cadastro de avaliações de IMC** dos alunos, calculadas com base na **altura e peso**.
-- [ ] O sistema deve gravar a **classificação do IMC** com base na seguinte tabela:
+- [x] Deve ser possível **ativar ou inativar** um usuário.
+- [x] O sistema deve permitir o **cadastro de avaliações de IMC** dos alunos, calculadas com base na **altura e peso**.
+- [x] O sistema deve gravar a **classificação do IMC** com base na seguinte tabela:
 
 | **IMC**        | **Classificação**  |
 | -------------- | ------------------ |
@@ -17,8 +17,8 @@
 | 35 - 39.9      | Obesidade grau II  |
 | Acima de 40    | Obesidade grau III |
 
-- [ ] Deve ser possível **consultar avaliações de IMC**, com **filtro por aluno ou professor**.
-- [ ] O sistema deve possuir **autenticação com usuário e senha**, acessível por **administradores, professores e alunos**.
+- [x] Deve ser possível **consultar avaliações de IMC**, com **filtro por aluno ou professor**.
+- [x] O sistema deve possuir **autenticação com usuário e senha**, acessível por **administradores, professores e alunos**.
 
 
 # ⚖️ Regras de Negócio
