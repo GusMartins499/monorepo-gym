@@ -10,11 +10,14 @@ import { useDialogStore } from "../../app/store/dialog-store";
 import { CreateImcForm } from "../create-imc-form";
 import { useSearchParams } from "next/navigation";
 import { CreateUserForm } from "../create-user";
+import { useAuthStore } from "../../app/store/auth";
+import { ProfessorOrAdminActions } from "../professor-admin-actions";
 
 export function ImcTable() {
   const searchParams = useSearchParams();
   const name = searchParams.get('name') ?? '';
-  const { openDialog } = useDialogStore()
+  const user = useAuthStore(({ user }) => user)
+  const isAdmin = user?.role === "ADMIN"
 
   const { data, isLoading } = useQuery({
     queryKey: ['imcs', name],
@@ -26,20 +29,7 @@ export function ImcTable() {
   return (
     <>
       <ImcFilter />
-      <Flex alignItems={'center'} justifyContent={'space-between'} mb='1.5rem'>
-        <Button bg='blue.500' onClick={() =>
-          openDialog("Adicionar usuário", <CreateUserForm />)
-        }>
-          <LuPlus />
-          Usuário
-        </Button>
-        <Button bg='blue.500' onClick={() =>
-          openDialog("Adicionar avaliação", <CreateImcForm />)
-        }>
-          <LuPlus />
-          Avaliação
-        </Button>
-      </Flex>
+      {isAdmin ? (<ProfessorOrAdminActions />) : null}
       <Table.Root variant='outline' size="lg">
         <Table.Header bg="gray.50">
           <Table.Row>
