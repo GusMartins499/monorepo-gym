@@ -45,3 +45,61 @@
 ## 🚫 Usuário Inativo
 > - **Não pode acessar** o sistema.  
 > - **Não pode ter novas avaliações cadastradas**.  
+
+# ▶️ Executando o projeto
+
+### 1. Instalar dependências
+Na raiz do monorepo, execute:
+```bash
+pnpm install
+```
+
+---
+
+### 2. Subir o banco de dados (Docker)
+Baixe a imagem do SQL Server 2022:
+```bash
+docker pull mcr.microsoft.com/mssql/server:2022-latest
+```
+
+Depois, inicie o container usando o `docker-compose.yml` que já está na raiz:
+```bash
+docker-compose up -d
+```
+
+⚠️ Observações:  
+- O container leva cerca de **30 segundos** para criar o banco.  
+- Você pode verificar os logs com:
+  ```bash
+  docker logs -f monorepo-gym-mssql
+  ```
+  Quando aparecer a mensagem abaixo, significa que o banco foi criado com sucesso:  
+  ```
+  Starting up database 'docker'
+  ```
+
+---
+
+### 3. Configurar variáveis de ambiente
+Crie um arquivo **.env** na **raiz**, em `apps/server` e em `apps/web` com o seguinte conteúdo:
+
+```env
+MSSQL_SA_PASSWORD=Docker@123
+JWT_SECRET=secret
+```
+
+---
+
+### 4. Rodar os serviços
+- **Servidor (API):**
+  ```bash
+  pnpm migration:run
+  ```
+- **Servidor (API):**
+  ```bash
+  pnpm --filter server dev
+  ```
+- **Aplicação Web:**
+  ```bash
+  pnpm --filter web dev
+  ```
