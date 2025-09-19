@@ -56,7 +56,24 @@ pnpm install
 
 ---
 
-### 2. Subir o banco de dados (Docker)
+### 2. Build do package env-config
+Na raiz do projeto execute os comandos:
+```bash
+cd packages/env-config
+pnpm build
+```
+
+### 3. Configurar variáveis de ambiente
+Crie um arquivo **.env** na **raiz**, em `apps/server` e em `apps/web` com o seguinte conteúdo:
+
+```env
+MSSQL_SA_PASSWORD=Docker@123
+JWT_SECRET=secret
+```
+
+---
+
+### 4. Subir o banco de dados (Docker)
 Baixe a imagem do SQL Server 2022:
 ```bash
 docker pull mcr.microsoft.com/mssql/server:2022-latest
@@ -80,17 +97,7 @@ docker-compose up -d
 
 ---
 
-### 3. Configurar variáveis de ambiente
-Crie um arquivo **.env** na **raiz**, em `apps/server` e em `apps/web` com o seguinte conteúdo:
-
-```env
-MSSQL_SA_PASSWORD=Docker@123
-JWT_SECRET=secret
-```
-
----
-
-### 4. Rodar os serviços
+### 5. Rodar os serviços
 - **Servidor (API):**
   ```bash
   pnpm migration:run
